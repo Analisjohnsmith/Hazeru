@@ -1,0 +1,284 @@
+#!/usr/bin/env python3
+
+# ==========================================================
+
+# THE BOOK OF THE IMMORTAL PEACH TREE — SOVEREIGN ARTIFACT
+
+# Copyright (c) 2026 Darrell Lee Stiltner
+
+# Contact: leelastiltner@gmail.com
+
+#
+
+# Licensed under the Creative Commons Attribution-NonCommercial 4.0 ND
+
+# ==========================================================
+
+"""
+
+SOVEREIGN DEPLOYMENT READY:
+
+A narrative engine of the Leela Multiverse.
+
+Features: Three Realms, Infinite Procedural Library, Vision Mandala.
+
+Requirements: Python 3.6+
+
+"""
+
+import sys
+
+import time
+
+import random
+
+# --- REALM ARCHITECTURE ---
+
+# Global State Map: Defines every possible transition to prevent glitches.
+
+WORLD_DATA = {
+
+"root": {
+
+"title": "Beneath the Immortal Peach Tree",
+
+"desc": "You are Leela. A single peach blossom hangs in the air, refusing to fall.\n"
+
+"To the north: Evergreen Dawn. To the west: Jade Summit. To the east: River of Echoes.\n"
+
+"Above and within: The Infinite Library.",
+
+"paths": {"evergreen": "evergreen", "jade": "jade", "river": "river", "library": "lib_gate"}
+
+},
+
+"evergreen": {
+
+"title": "The Evergreen Dawn",
+
+"desc": "The scent of pine and crushed blossoms fills the cool air.\n"
+
+"The Memory Forest stretches deep here. Every tree is a story.",
+
+"paths": {"bench": "evergreen_bench", "back": "root"}
+
+},
+
+"evergreen_bench": {
+
+"title": "The Bench of Remembering",
+
+"desc": "A stone bench carved with ancient glyphs. Sitting here, you feel\n"
+
+"the weight of lives you haven't lived yet.",
+
+"paths": {"back": "evergreen"}
+
+},
+
+"jade": {
+
+"title": "The Jade Summit",
+
+"desc": "The air is thin and crystalline. Hexagrams shift in the clouds.\n"
+
+"This is the realm of sharp decisions and high thresholds.",
+
+"paths": {"cliff": "jade_cliff", "back": "root"}
+
+},
+
+"jade_cliff": {
+
+"title": "The Cliff of Sharp Choices",
+
+"desc": "You stand on the edge of a great height. The mist below\n"
+
+"swirls like unformed thoughts. You are safe, yet perched.",
+
+"paths": {"back": "jade"}
+
+},
+
+"river": {
+
+"title": "River of Interdependent Echoes",
+
+"desc": "The water flows sideways through the landscape.\n"
+
+"You see ripples touching ripples, forming a complex web of light.",
+
+"paths": {"boat": "river_boat", "back": "root"}
+
+},
+
+"river_boat": {
+
+"title": "The Drifting Boat",
+
+"desc": "A small wooden vessel. It moves without oars, guided by\n"
+
+"the currents of cause and effect.",
+
+"paths": {"back": "river"}
+
+}
+
+}
+
+class PeachTreeEngine:
+
+def init(self):
+
+self.location = "root"
+
+self.running = True
+
+self.lib_depth = 0
+
+def header(self):
+
+"""Displays the Sovereign Attribution on startup."""
+
+print("\n" + "🌸" * 30)
+
+print(" THE BOOK OF THE IMMORTAL PEACH TREE")
+
+print(" A Sovereign Artifact by Darrell Lee Stiltner")
+
+print(" Copyright © 2026 | CC BY-NC 3.0")
+
+print("🌸" * 30 + "\n")
+
+def draw_vision(self):
+
+"""Generates a text-based soul-mandala for the current state."""
+
+char = "✧" if self.location == "root" else "❈"
+
+print(f"\n--- VISION OF {self.location.upper()} ---")
+
+print(f" .{char}.")
+
+print(f" .: {char} :.")
+
+print(f" {char} : LEELA : {char}")
+
+print(f" ': {char} :'")
+
+print(f" '{char}'")
+
+print("-----------------------")
+
+def run_library(self):
+
+"""The recursive procedural logic for the Infinite Library."""
+
+self.lib_depth = 1
+
+print("\n[!] You have stepped sideways into the Infinite Library.")
+
+while True:
+
+print(f"\n--- Library Depth: {self.lib_depth} ---")
+
+print("The shelves fold into themselves. Infinite volumes surround you.")
+
+print("Options: [open] a volume, [back] to the Peach Tree.")
+
+
+try:
+
+cmd = input("library >> ").strip().lower()
+
+except (EOFError, KeyboardInterrupt):
+
+break
+
+if cmd == "back":
+
+self.location = "root"
+
+break
+
+elif cmd == "open":
+
+self.lib_depth += 1
+
+print(f"You open a book and fall into its pages... deeper now.")
+
+else:
+
+print("The library only answers to 'open' or 'back'.")
+
+def main_loop(self):
+
+"""The heart of the Dharma Engine."""
+
+self.header()
+
+while self.running:
+
+node = WORLD_DATA.get(self.location, WORLD_DATA["root"])
+
+
+print(f"\n>> {node['title']}")
+
+for line in node['desc'].split('\n'):
+
+print(f" {line}")
+
+time.sleep(0.08) # Pacing for the reader
+
+
+print(f"\nPaths: {', '.join(node['paths'].keys())} | vision | quit")
+
+
+try:
+
+choice = input("\nLeela > ").strip().lower()
+
+except (EOFError, KeyboardInterrupt):
+
+break
+
+if choice == "quit":
+
+print("\nThe blossom remains suspended. The path is held.")
+
+self.running = False
+
+elif choice == "vision":
+
+self.draw_vision()
+
+elif choice == "library" or node['paths'].get(choice) == "lib_gate":
+
+self.run_library()
+
+elif choice in node['paths']:
+
+self.location = node['paths'][choice]
+
+else:
+
+print("\n[!] The Dharma engine hums... that path does not yet exist.")
+
+if name == "__main__":
+
+try:
+
+engine = PeachTreeEngine()
+
+engine.main_loop()
+
+except Exception as e:
+
+print(f"\nA glitch in the reality: {e}")
+
+sys.exit(1)
+
+finally:
+
+print("\nGoodbye, Leela. The Peach Tree remembers.\n") simulate 
+
