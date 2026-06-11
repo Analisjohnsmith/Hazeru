@@ -1,0 +1,1189 @@
+mod reflection; // ← this line wires in src/reflection.rs
+
+//! 🌳 Hundred Acre Meta‑Wood — Monolithic Rust Prototype
+//! Single‑file version combining loader, parser, emotional physics,
+//! meta‑layer, world navigation, characters, and interactions.
+
+use rand::seq::SliceRandom;
+use rand::thread_rng;
+use std::fs;
+use std::io;
+use std::io::Read;
+
+// ============================================================================
+// LOADER — LOAD PUBLIC‑DOMAIN POOH TEXTS FROM ./data/*.txt
+// ============================================================================
+
+fn load_pooh_texts(dir: &str) -> io::Result<Vec<String>> {
+    let mut texts = Vec::new();
+
+    for entry in fs::read_dir(dir)? {
+        let entry = entry?;
+        let path = entry.path();
+
+        if path.extension().and_then(|s| s.to_str()) == Some("txt") {
+            let mut file = fs::File::open(&path)?;
+            let mut content = String::new();
+            file.read_to_string(&mut content)?;
+            texts.push(content);
+        }
+    }
+
+    Ok(texts)
+}
+
+// ============================================================================
+// PARSER — META‑BOOK STRUCTURE (SENTENCES + MOTIFS)
+// ============================================================================
+
+pub struct MetaBook {
+    pub sentences: Vec<String>,
+    pub motifs: Vec<String>,
+}
+
+fn parse_meta_book(texts: &[String]) -> MetaBook {
+    let mut sentences = Vec::new();
+    let mut motifs = Vec::new();
+
+    for text in texts {
+        for line in text.lines() {
+            let trimmed = line.trim();
+            if trimmed.len() > 3 {
+                sentences.push(trimmed.to_string());
+            }
+
+            // Simple motif detection
+            for motif in ["honey", "wind", "forest", "tracks", "dream"].iter() {
+                if trimmed.to_lowercase().contains(motif) {
+                    motifs.push(motif.to_string());
+                }
+            }
+        }
+    }
+
+    MetaBook { sentences, motifs }
+}
+
+// ============================================================================
+// EMOTIONAL PHYSICS — EMOTION ENUM + STATE
+// ============================================================================
+
+#[derive(Clone, PartialEq)]
+pub enum Emotion {
+    Fear,
+    Sadness,
+    Hunger,
+    Calm,
+}
+
+#[derive(Clone)]
+pub struct EmotionalState {
+    pub current: Emotion,
+}
+
+impl EmotionalState {
+    pub fn new() -> Self {
+        Self {
+            current: Emotion::Calm,
+        }
+    }
+
+    pub fn set(&mut self, emotion: Emotion) {
+        self.current = emotion;
+    }
+}
+
+// ============================================================================
+// META‑LAYER STATE + REWRITE
+// ============================================================================
+
+pub struct MetaState {
+    pub loops: u32,
+    pub awareness: f32,
+    pub flags: Vec<String>,
+}
+
+impl MetaState {
+    pub fn new() -> Self {
+        Self {
+            loops: 0,
+            awareness: 0.0,
+            flags: Vec::new(),
+        }
+    }
+
+    pub fn increment_loop(&mut self) {
+        self.loops += 1;
+        self.awareness += 0.1;
+        if self.awareness > 1.5 {
+            self.awareness = 1.5;
+        }
+    }
+
+    pub fn trigger(&mut self, flag: &str) {
+        let f = flag.to_string();
+        if !self.flags.contains(&f) {
+            self.flags.push(f);
+        }
+    }
+
+    pub fn is_triggered(&self, flag: &str) -> bool {
+        self.flags.contains(&flag.to_string())
+    }
+}
+
+fn meta_rewrite(text: &str, meta: &MetaState) -> String {
+    let mut rng = thread_rng();
+    let mut s = text.to_string();
+
+    // As awareness increases, the text becomes self‑aware
+    if meta.awareness > 0.3 {
+        let inserts = vec![
+            "…but something feels slightly off.",
+            "You sense the story watching you.",
+            "A page rustles, though there is no wind.",
+            "The forest pauses, as if waiting for your choice.",
+        ];
+
+        if let Some(insert) = inserts.choose(&mut rng) {
+            s.push(' ');
+            s.push_str(insert);
+        }
+    }
+
+    // At high awareness, the story breaks the frame
+    if meta.awareness > 0.6 {
+        s.push_str(" You feel as though the book is trying to speak to you.");
+    }
+
+    s
+}
+
+// ============================================================================
+// SCENE GENERATOR — BASED ON META‑BOOK + EMOTIONAL PHYSICS
+// ============================================================================
+
+pub struct GeneratedScene {
+    pub text: String,
+    pub choices: Vec<(String, String)>, // (choice_text, next_scene_id)
+}
+
+fn apply_emotional_physics(sentence: String, state: &EmotionalState) -> String {
+    let mut s = sentence;
+
+    match state.current {
+        Emotion::Fear => {
+            s.push_str(" A faint fog rolls in, as if Piglet is worried about something.");
+        }
+        Emotion::Sadness => {
+            s.push_str(" The colors seem a little duller today, like Eeyore’s mood is affecting the forest.");
+        }
+        Emotion::Hunger => {
+            s.push_str(" You notice a gentle smell of honey drifting through the air.");
+        }
+        Emotion::Calm => {
+            s.push_str(" Everything feels peaceful and warm.");
+        }
+    }
+
+    s
+}
+
+fn generate_scene(meta: &MetaBook, state: &EmotionalState) -> GeneratedScene {
+    let mut rng = thread_rng();
+
+    // Pick a random sentence from the Pooh meta‑book
+    let base_sentence = meta
+        .sentences
+        .choose(&mut rng)
+        .unwrap_or(&"The forest is quiet today.".to_string())
+        .clone();
+
+    // Modify the sentence based on emotional physics
+    let modified_sentence = apply_emotional_physics(base_sentence, state);
+
+    // Generate choices based on motifs
+    let mut choices = Vec::new();
+
+    if meta.motifs.contains(&"honey".to_string()) {
+        choices.push(("Follow the scent of honey".to_string(), "honey_path".to_string()));
+    }
+
+    if meta.motifs.contains(&"wind".to_string()) {
+        choices.push(("Listen to the wind".to_string(), "wind_scene".to_string()));
+    }
+
+    if meta.motifs.contains(&"forest".to_string()) {
+        choices.push(("Explore deeper into the forest".to_string(), "deep_forest_scene".to_string()));
+    }
+
+    // Always include a meta‑choice
+    choices.push((
+        "Open the meta‑book".to_string(),
+        "meta_layer".to_string(),
+    ));
+
+    GeneratedScene {
+        text: modified_sentence,
+        choices,
+    }
+}
+
+// ============================================================================
+// DREAM LAYER — DESCRIPTION DISTORTION + DREAM SCENE
+// ============================================================================
+
+fn distort_description(desc: &str, awareness: f32) -> String {
+    let mut s = desc.to_string();
+
+    if awareness > 0.4 {
+        s.push_str(" The trees seem to whisper fragments of old choices.");
+    }
+
+    if awareness > 0.7 {
+        s.push_str(" Paths twist into shapes you almost recognize.");
+    }
+
+    if awareness > 1.0 {
+        s.push_str(" You feel as though the forest is dreaming of you.");
+    }
+
+    s
+}
+
+fn generate_dream_scene(meta: &MetaBook, state: &EmotionalState, awareness: f32) -> GeneratedScene {
+    let mut rng = thread_rng();
+
+    let base = meta
+        .sentences
+        .choose(&mut rng)
+        .unwrap_or(&"The dream shifts around you.".to_string())
+        .clone();
+
+    let mut text = format!("(dream) {}", base);
+
+    if awareness > 0.5 {
+        text.push_str(" You hear echoes of choices you made before.");
+    }
+
+    let mut choices = vec![
+        ("Wake up in the deep forest".to_string(), "deep_forest".to_string()),
+        ("Let the dream continue".to_string(), "dream_layer".to_string()),
+    ];
+
+    // Always allow returning to cottage eventually
+    choices.push((
+        "Return to the cottage".to_string(),
+        "cottage".to_string(),
+    ));
+
+    GeneratedScene { text, choices }
+}
+
+// ============================================================================
+// WORLD STRUCTURE — REGIONS, CONNECTIONS, GATES
+// ============================================================================
+
+pub struct Region {
+    pub id: String,
+    pub description: String,
+    pub connections: Vec<Connection>,
+}
+
+pub struct Connection {
+    pub to: String,
+    pub gate: Gate,
+}
+
+pub enum Gate {
+    None,
+    EmotionRequired(Emotion),
+    MetaFlagRequired(String),
+}
+
+impl Region {
+    pub fn is_accessible(&self, gate: &Gate, emotion: &EmotionalState, meta: &MetaState) -> bool {
+        match gate {
+            Gate::None => true,
+            Gate::EmotionRequired(e) => &emotion.current == e,
+            Gate::MetaFlagRequired(flag) => meta.is_triggered(flag),
+        }
+    }
+}
+
+fn build_world() -> Vec<Region> {
+    vec![
+        Region {
+            id: "cottage".to_string(),
+            description: "A cozy clearing with your small cottage.".to_string(),
+            connections: vec![
+                Connection { to: "pooh_house".to_string(), gate: Gate::None },
+                Connection { to: "piglet_hollow".to_string(), gate: Gate::None },
+                Connection { to: "deep_forest".to_string(), gate: Gate::EmotionRequired(Emotion::Calm) },
+                Connection { to: "meta_grove".to_string(), gate: Gate::MetaFlagRequired("opened_meta_book".to_string()) },
+            ],
+        },
+        Region {
+            id: "pooh_house".to_string(),
+            description: "Pooh's warm little home, smelling faintly of honey.".to_string(),
+            connections: vec![
+                Connection { to: "cottage".to_string(), gate: Gate::None },
+                Connection { to: "deep_forest".to_string(), gate: Gate::EmotionRequired(Emotion::Hunger) },
+            ],
+        },
+        Region {
+            id: "piglet_hollow".to_string(),
+            description: "Piglet's quiet hollow, where the wind always seems to whisper.".to_string(),
+            connections: vec![
+                Connection { to: "cottage".to_string(), gate: Gate::None },
+                Connection { to: "deep_forest".to_string(), gate: Gate::EmotionRequired(Emotion::Fear) },
+            ],
+        },
+        Region {
+            id: "deep_forest".to_string(),
+            description: "The deeper part of the forest, where secrets hide.".to_string(),
+            connections: vec![
+                Connection { to: "cottage".to_string(), gate: Gate::None },
+                Connection { to: "dream_layer".to_string(), gate: Gate::MetaFlagRequired("awareness_high".to_string()) },
+            ],
+        },
+        Region {
+            id: "meta_grove".to_string(),
+            description: "A strange grove where the book's pages flutter in the air.".to_string(),
+            connections: vec![
+                Connection { to: "cottage".to_string(), gate: Gate::None },
+            ],
+        },
+        Region {
+            id: "dream_layer".to_string(),
+            description: "A shimmering dream‑world where the forest remembers everything.".to_string(),
+            connections: vec![
+                Connection { to: "deep_forest".to_string(), gate: Gate::None },
+            ],
+        },
+    ]
+}
+
+// ============================================================================
+// CHARACTERS — CORE EMOTION + LOCATION + AWARENESS
+// ============================================================================
+
+#[derive(Clone)]
+pub struct Character {
+    pub name: String,
+    pub core_emotion: Emotion,
+    pub location: String,
+    pub awareness: f32,
+}
+
+impl Character {
+    pub fn new(name: &str, emotion: Emotion, start: &str) -> Self {
+        Self {
+            name: name.to_string(),
+            core_emotion: emotion,
+            location: start.to_string(),
+            awareness: 0.0,
+        }
+    }
+
+    pub fn influence_emotion(&self, emotion: &mut EmotionalState) {
+        emotion.set(self.core_emotion.clone());
+    }
+
+    pub fn tick(&mut self, meta: &MetaState) {
+        // Characters become more aware as the meta-layer grows
+        self.awareness += meta.awareness * 0.05;
+        if self.awareness > 1.5 {
+            self.awareness = 1.5;
+        }
+    }
+}
+
+fn create_characters() -> Vec<Character> {
+    vec![
+        Character::new("Pooh", Emotion::Hunger, "pooh_house"),
+        Character::new("Piglet", Emotion::Fear, "piglet_hollow"),
+        Character::new("Eeyore", Emotion::Sadness, "deep_forest"),
+        Character::new("Christopher Robin", Emotion::Calm, "cottage"),
+    ]
+}
+
+// ============================================================================
+// INTERACTIONS — TALKING TO CHARACTERS
+// ============================================================================
+
+pub struct Interaction {
+    pub text: String,
+    pub choices: Vec<(String, InteractionEffect)>,
+}
+
+pub enum InteractionEffect {
+    Emotion(Emotion),
+    MetaFlag(String),
+    AwarenessBoost(f32),
+    None,
+}
+
+fn interact_with(name: &str) -> Interaction {
+    match name {
+        "Pooh" => Interaction {
+            text: "Pooh looks at you warmly. \"I was thinking about honey today.\"".to_string(),
+            choices: vec![
+                ("Ask Pooh about honey".to_string(), InteractionEffect::Emotion(Emotion::Hunger)),
+                ("Ask Pooh about the forest".to_string(), InteractionEffect::AwarenessBoost(0.1)),
+                ("Say goodbye".to_string(), InteractionEffect::None),
+            ],
+        },
+
+        "Piglet" => Interaction {
+            text: "Piglet trembles slightly. \"Oh d‑d‑dear… is everything alright?\"".to_string(),
+            choices: vec![
+                ("Comfort Piglet".to_string(), InteractionEffect::Emotion(Emotion::Calm)),
+                ("Ask what he's afraid of".to_string(), InteractionEffect::MetaFlag("piglet_fear_revealed".to_string())),
+                ("Leave quietly".to_string(), InteractionEffect::None),
+            ],
+        },
+
+        "Eeyore" => Interaction {
+            text: "Eeyore sighs. \"Not much of a day, is it?\"".to_string(),
+            choices: vec![
+                ("Encourage Eeyore".to_string(), InteractionEffect::Emotion(Emotion::Calm)),
+                ("Agree with him".to_string(), InteractionEffect::Emotion(Emotion::Sadness)),
+                ("Ask why the forest feels strange".to_string(), InteractionEffect::AwarenessBoost(0.2)),
+            ],
+        },
+
+        "Christopher Robin" => Interaction {
+            text: "Christopher Robin smiles gently. \"The forest is changing. Have you noticed?\"".to_string(),
+            choices: vec![
+                ("Ask what he means".to_string(), InteractionEffect::AwarenessBoost(0.3)),
+                ("Tell him you feel watched".to_string(), InteractionEffect::MetaFlag("player_awareness_ack".to_string())),
+                ("Stay silent".to_string(), InteractionEffect::Emotion(Emotion::Calm)),
+            ],
+        },
+
+        _ => Interaction {
+            text: "There is no one here.".to_string(),
+            choices: vec![("Continue".to_string(), InteractionEffect::None)],
+        },
+    }
+}
+
+// ============================================================================
+// MAIN LOOP — WORLD NAVIGATION + SCENE GENERATION + META‑LAYER
+// ============================================================================
+
+fn main() {
+    println!("🌳 Welcome to the Hundred Acre Meta‑Wood!");
+
+    // Load Pooh texts and build meta‑book
+    let raw_texts = load_pooh_texts("data").expect("Failed to load Pooh texts from ./data");
+    let meta_book = parse_meta_book(&raw_texts);
+
+    // Core simulation state
+    let mut emotion = EmotionalState::new();
+    let mut meta_state = MetaState::new();
+    let mut world = build_world();
+    let mut characters = create_characters();
+
+    let mut current_region = "cottage".to_string();
+
+    loop {
+        // Update characters based on meta‑state
+        for c in characters.iter_mut() {
+            c.tick(&meta_state);
+        }
+
+        // Find current region
+        let region = world
+            .iter()
+            .find(|r| r.id == current_region)
+            .expect("Region not found");
+
+        // Distort description if awareness is high (especially in dream layer)
+        let base_desc = &region.description;
+        let desc = if region.id == "dream_layer" {
+            distort_description(base_desc, meta_state.awareness)
+        } else {
+            base_desc.clone()
+        };
+
+        println!("\n📍 You are in: {}\n", desc);
+
+        // Show accessible connections
+        let mut available = Vec::new();
+        for (i, conn) in region.connections.iter().enumerate() {
+            if region.is_accessible(&conn.gate, &emotion, &meta_state) {
+                println!("{}. Go to {}", i + 1, conn.to);
+                available.push(conn.to.clone());
+            }
+        }
+
+        if available.is_empty() {
+            println!("There seems to be nowhere to go from here. The forest waits.");
+        }
+
+        // Characters influence emotion if nearby and allow interaction
+        for c in characters.iter() {
+            if c.location == current_region {
+                println!("\nYou see {} here.", c.name);
+
+                let interaction = interact_with(&c.name);
+
+                println!("\n{}\n", interaction.text);
+
+                for (i, (choice_text, _)) in interaction.choices.iter().enumerate() {
+                    println!("{}. {}", i + 1, choice_text);
+                }
+
+                let mut input = String::new();
+                io::stdin().read_line(&mut input).unwrap();
+                let index = input.trim().parse::<usize>().unwrap_or(1) - 1;
+
+                if let Some((_, effect)) = interaction.choices.get(index) {
+                    match effect {
+                        InteractionEffect::Emotion(e) => emotion.set(e.clone()),
+                        InteractionEffect::MetaFlag(flag) => {
+                            meta_state.trigger(flag);
+                            if flag == "player_awareness_ack" && meta_state.awareness < 0.8 {
+                                meta_state.awareness = 0.8;
+                            }
+                        }
+                        InteractionEffect::AwarenessBoost(a) => {
+                            meta_state.awareness += *a;
+                        }
+                        InteractionEffect::None => {}
+                    }
+                }
+            }
+        }
+
+        // Player chooses region
+        if !available.is_empty() {
+            println!("\nWhere will you go next?");
+            let mut input = String::new();
+            io::stdin().read_line(&mut input).unwrap();
+            let index = input.trim().parse::<usize>().unwrap_or(1) - 1;
+
+            if let Some(next) = available.get(index) {
+                current_region = next.clone();
+            } else {
+                println!("You hesitate, and the forest gently nudges you to stay where you are.");
+            }
+        }
+
+        // Generate scene inside region
+        let mut scene = if current_region == "dream_layer" {
+            generate_dream_scene(&meta_book, &emotion, meta_state.awareness)
+        } else {
+            generate_scene(&meta_book, &emotion)
+        };
+
+        // Apply meta‑layer rewriting
+        scene.text = meta_rewrite(&scene.text, &meta_state);
+
+        println!("\n{}\n", scene.text);
+
+        for (i, (choice_text, _)) in scene.choices.iter().enumerate() {
+            println!("{}. {}", i + 1, choice_text);
+        }
+
+        let mut input = String::new();
+        io::stdin().read_line(&mut input).unwrap();
+        let index = input.trim().parse::<usize>().unwrap_or(1) - 1;
+
+        let next_scene = if let Some((_, ns)) = scene.choices.get(index) {
+            ns.clone()
+        } else {
+            scene
+                .choices
+                .get(0)
+                .map(|(_, ns)| ns.clone())
+                .unwrap_or_else(|| "cottage".to_string())
+        };
+
+        // Emotional + meta triggers based on scene choice
+        match next_scene.as_str() {
+            "honey_path" => emotion.set(Emotion::Hunger),
+            "wind_scene" => emotion.set(Emotion::Fear),
+            "deep_forest_scene" => emotion.set(Emotion::Sadness),
+
+            "meta_layer" => {
+                reflection::run_reflection(&mut meta_state, &mut emotion);
+                meta_state.trigger("opened_meta_book");
+                continue;
+            }
+
+            "dream_layer" => {
+                meta_state.trigger("awareness_high");
+            }
+            _ => {}
+        }
+
+        // Increase meta‑awareness each loop
+        meta_state.increment_loop();
+    }
+}
+
+use std::collections::HashMap;
+use std::io::{self, Write};
+
+use crate::{MetaState, EmotionalState, Emotion};
+
+src/reflection.rs
+```rust
+use std::collections::HashMap;
+use std::io::{self, Write};
+
+use crate::meta::MetaState;
+use crate::emotions::{EmotionalState, Emotion};
+
+// ===============================
+// WORLD STATE
+// ===============================
+
+#[derive(Debug, Clone)]
+struct WorldState {
+    presence: f32,
+    clarity: f32,
+    integration: f32,
+    yin: f32,
+    yang: f32,
+}
+
+impl WorldState {
+    fn new() -> Self {
+        Self {
+            presence: 0.25,
+            clarity: 0.25,
+            integration: 0.25,
+            yin: 0.50,
+            yang: 0.50,
+        }
+    }
+
+    fn clamp(&mut self) {
+        for v in [
+            &mut self.presence,
+            &mut self.clarity,
+            &mut self.integration,
+            &mut self.yin,
+            &mut self.yang,
+        ] {
+            if *v < 0.0 {
+                *v = 0.0;
+            } else if *v > 1.0 {
+                *v = 1.0;
+            }
+        }
+    }
+}
+
+// ===============================
+// CODEX NODES (Pooh Wisdom)
+// ===============================
+
+#[derive(Debug, Clone)]
+struct CodexNode {
+    id: String,
+    text: String,
+    links: Vec<String>,
+}
+
+#[derive(Debug, Clone)]
+struct Codex {
+    nodes: HashMap<String, CodexNode>,
+}
+
+fn build_codex() -> Codex {
+    let mut nodes = HashMap::new();
+
+    nodes.insert(
+        "pooh_1".to_string(),
+        CodexNode {
+            id: "pooh_1".to_string(),
+            text: "Pooh believes gentle thoughts help the heart feel less heavy.".to_string(),
+            links: vec!["pooh_2".to_string()],
+        },
+    );
+
+    nodes.insert(
+        "pooh_2".to_string(),
+        CodexNode {
+            id: "pooh_2".to_string(),
+            text: "Pooh thinks wandering slowly is still a kind of progress.".to_string(),
+            links: vec!["pooh_3".to_string()],
+        },
+    );
+
+    nodes.insert(
+        "pooh_3".to_string(),
+        CodexNode {
+            id: "pooh_3".to_string(),
+            text: "Pooh remembers that friends help each other carry difficult feelings.".to_string(),
+            links: vec![],
+        },
+    );
+
+    Codex { nodes }
+}
+
+// ===============================
+// NARRATIVE REGIONS
+// ===============================
+
+#[derive(Debug, Clone)]
+struct RegionNode {
+    id: String,
+    text: String,
+    links: Vec<String>,
+}
+
+#[derive(Debug, Clone)]
+struct Region {
+    id: String,
+    name: String,
+    nodes: HashMap<String, RegionNode>,
+}
+
+#[derive(Debug, Clone)]
+struct NarrativeMap {
+    regions: HashMap<String, Region>,
+}
+
+fn build_narrative_map() -> NarrativeMap {
+    let mut regions = HashMap::new();
+
+    // Threshold
+    let mut threshold_nodes = HashMap::new();
+    threshold_nodes.insert(
+        "opening".to_string(),
+        RegionNode {
+            id: "opening".to_string(),
+            text: "The Hundred Acre Wood rustles softly, noticing you’ve arrived.".to_string(),
+            links: vec!["invitation".to_string()],
+        },
+    );
+    threshold_nodes.insert(
+        "invitation".to_string(),
+        RegionNode {
+            id: "invitation".to_string(),
+            text: "You may say anything at all. The Wood is listening.".to_string(),
+            links: vec!["guidance".to_string()],
+        },
+    );
+    threshold_nodes.insert(
+        "guidance".to_string(),
+        RegionNode {
+            id: "guidance".to_string(),
+            text: "Your words fall like gentle footsteps on a forest path.".to_string(),
+            links: vec!["field".to_string()],
+        },
+    );
+
+    regions.insert(
+        "threshold".to_string(),
+        Region {
+            id: "threshold".to_string(),
+            name: "Threshold".to_string(),
+            nodes: threshold_nodes,
+        },
+    );
+
+    // Field
+    let mut field_nodes = HashMap::new();
+    field_nodes.insert(
+        "field".to_string(),
+        RegionNode {
+            id: "field".to_string(),
+            text: "Thoughts drift here like Pooh wandering in search of honey.".to_string(),
+            links: vec!["question".to_string()],
+        },
+    );
+    field_nodes.insert(
+        "question".to_string(),
+        RegionNode {
+            id: "question".to_string(),
+            text: "You may wonder aloud or simply continue. Both are movement.".to_string(),
+            links: vec!["mirror".to_string()],
+        },
+    );
+
+    regions.insert(
+        "field".to_string(),
+        Region {
+            id: "field".to_string(),
+            name: "Wandering Field".to_string(),
+            nodes: field_nodes,
+        },
+    );
+
+    // Mirror
+    let mut mirror_nodes = HashMap::new();
+    mirror_nodes.insert(
+        "mirror".to_string(),
+        RegionNode {
+            id: "mirror".to_string(),
+            text: "Here, your words return to you like echoes between tall trees.".to_string(),
+            links: vec!["reflection".to_string()],
+        },
+    );
+    mirror_nodes.insert(
+        "reflection".to_string(),
+        RegionNode {
+            id: "reflection".to_string(),
+            text: "Notice the thoughts you hesitate to repeat. They may matter most.".to_string(),
+            links: vec!["choice".to_string()],
+        },
+    );
+    mirror_nodes.insert(
+        "choice".to_string(),
+        RegionNode {
+            id: "choice".to_string(),
+            text: "You may look away or look closer. The Wood is gentle either way.".to_string(),
+            links: vec!["ascent".to_string()],
+        },
+    );
+
+    regions.insert(
+        "mirror".to_string(),
+        Region {
+            id: "mirror".to_string(),
+            name: "Echoing Trees".to_string(),
+            nodes: mirror_nodes,
+        },
+    );
+
+    // Ascent
+    let mut ascent_nodes = HashMap::new();
+    ascent_nodes.insert(
+        "ascent".to_string(),
+        RegionNode {
+            id: "ascent".to_string(),
+            text: "Something in you is already climbing, like Pooh up a honey tree.".to_string(),
+            links: vec!["focus".to_string()],
+        },
+    );
+    ascent_nodes.insert(
+        "focus".to_string(),
+        RegionNode {
+            id: "focus".to_string(),
+            text: "If you wish, name one thing you’d like to carry differently.".to_string(),
+            links: vec!["crown".to_string()],
+        },
+    );
+
+    regions.insert(
+        "ascent".to_string(),
+        Region {
+            id: "ascent".to_string(),
+            name: "Honey Ascent".to_string(),
+            nodes: ascent_nodes,
+        },
+    );
+
+    // Crown
+    let mut crown_nodes = HashMap::new();
+    crown_nodes.insert(
+        "crown".to_string(),
+        RegionNode {
+            id: "crown".to_string(),
+            text: "Let everything you’ve said sit together like friends at a picnic.".to_string(),
+            links: vec!["opening".to_string()],
+        },
+    );
+
+    regions.insert(
+        "crown".to_string(),
+        Region {
+            id: "crown".to_string(),
+            name: "Picnic Crown".to_string(),
+            nodes: crown_nodes,
+        },
+    );
+
+    NarrativeMap { regions }
+}
+
+// ===============================
+// RITUALS
+// ===============================
+
+fn synthesis(state: &mut WorldState) {
+    state.presence += 0.05;
+    state.clarity += 0.05;
+    state.integration += 0.05;
+    state.yin = (state.yin + 0.5) / 2.0;
+    state.yang = (state.yang + 0.5) / 2.0;
+    state.clamp();
+}
+
+// ===============================
+// POOH SIMULATOR
+// ===============================
+
+struct PoohSimulator {
+    state: WorldState,
+    codex: Codex,
+    map: NarrativeMap,
+    current_region: String,
+    current_node: String,
+    memory: Vec<HashMap<String, String>>,
+}
+
+impl PoohSimulator {
+    fn new() -> Self {
+        Self {
+            state: WorldState::new(),
+            codex: build_codex(),
+            map: build_narrative_map(),
+            current_region: "threshold".to_string(),
+            current_node: "opening".to_string(),
+            memory: Vec::new(),
+        }
+    }
+
+    fn narrative_node(&self) -> &RegionNode {
+        let region = self.map.regions.get(&self.current_region).unwrap();
+        region.nodes.get(&self.current_node).unwrap()
+    }
+
+    fn activate_codex(&self, prompt: &str) -> Vec<&CodexNode> {
+        let words: Vec<String> = prompt
+            .to_lowercase()
+            .split_whitespace()
+            .map(|s| s.to_string())
+            .collect();
+
+        let mut scored: Vec<(i32, &CodexNode)> = Vec::new();
+
+        for node in self.codex.nodes.values() {
+            let mut score = 0;
+            for w in &words {
+                if node.text.to_lowercase().contains(w) {
+                    score += 1;
+                }
+            }
+            if score > 0 {
+                scored.push((score, node));
+            }
+        }
+
+        scored.sort_by(|a, b| b.0.cmp(&a.0));
+        scored.into_iter().map(|(_, n)| n).collect()
+    }
+
+    fn reason(&self, prompt: &str, nodes: Vec<&CodexNode>) -> String {
+        if nodes.is_empty() {
+            return "Pooh sits beside you quietly, offering gentle company.".to_string();
+        }
+
+        let mut phrases: Vec<String> = Vec::new();
+        for n in nodes {
+            for part in n.text.split('.') {
+                let p = part.trim();
+                if !p.is_empty() {
+                    phrases.push(p.to_string());
+                }
+            }
+        }
+
+        let mut mem_lines: Vec<String> = Vec::new();
+        for m in self.memory.iter().rev().take(5) {
+            for v in m.values() {
+                mem_lines.push(v.clone());
+            }
+        }
+
+        let mut combined = phrases;
+        combined.extend(mem_lines);
+
+        let words: Vec<String> = prompt
+            .to_lowercase()
+            .split_whitespace()
+            .map(|s| s.to_string())
+            .collect();
+
+        let mut relevant: Vec<String> = combined
+            .into_iter()
+            .filter(|line| {
+                words
+                    .iter()
+                    .any(|w| line.to_lowercase().contains(&w.to_lowercase()))
+            })
+            .collect();
+
+        if relevant.is_empty() {
+            relevant = vec![
+                "Pooh thinks slow thoughts are still good thoughts.".to_string(),
+                "Pooh believes you don’t have to hurry.".to_string(),
+                "Pooh feels you’re not alone here.".to_string(),
+            ];
+        }
+
+        relevant.into_iter().take(3).collect::<Vec<_>>().join(" ")
+    }
+
+    fn detect_tone(&self, prompt: &str) -> &'static str {
+        let p = prompt.to_lowercase();
+        if ["sad", "hurt", "lost", "alone", "grief"]
+            .iter()
+            .any(|w| p.contains(w))
+        {
+            "comfort"
+        } else if ["why", "meaning", "explain", "understand"]
+            .iter()
+            .any(|w| p.contains(w))
+        {
+            "clarity"
+        } else if ["think", "reflect", "wonder"]
+            .iter()
+            .any(|w| p.contains(w))
+        {
+            "reflective"
+        } else if ["hi", "hello", "hey"].iter().any(|w| p.contains(w)) {
+            "warm"
+        } else {
+            "neutral"
+        }
+    }
+
+    fn shape_voice(&self, prompt: &str, raw: String) -> (String, &'static str) {
+        let tone = self.detect_tone(prompt);
+        let s = &self.state;
+
+        let voiced = match tone {
+            "comfort" => format!("Pooh says softly: \"{}\"", raw),
+            "clarity" => format!("Pooh thinks very hard and says: \"{}\"", raw),
+            "reflective" => format!("Pooh tilts his head and says: \"{}\"", raw),
+            "warm" => format!("Pooh smiles: \"{}\"", raw),
+            _ => {
+                if s.presence > 0.8 {
+                    format!("Pooh feels very close to you and says: \"{}\"", raw)
+                } else {
+                    format!("Pooh says: \"{}\"", raw)
+                }
+            }
+        };
+
+        (voiced, tone)
+    }
+
+    fn check_transitions(&mut self) {
+        let s = &self.state;
+        let current = self.current_region.clone();
+
+        let target = if current == "threshold" && s.presence > 0.30 {
+            Some("field".to_string())
+        } else if current == "field" && s.clarity > 0.35 {
+            Some("mirror".to_string())
+        } else if current == "mirror" && s.integration > 0.40 {
+            Some("ascent".to_string())
+        } else if current == "ascent"
+            && s.presence > 0.55
+            && s.clarity > 0.55
+            && s.integration > 0.55
+        {
+            Some("crown".to_string())
+        } else {
+            None
+        };
+
+        if let Some(t) = target {
+            self.current_region = t.clone();
+            let region = self.map.regions.get(&t).unwrap();
+            let first_key = region.nodes.keys().next().unwrap().clone();
+            self.current_node = first_key;
+        }
+    }
+
+    fn respond(&mut self, text: &str) -> (String, &'static str) {
+        let mut mem_entry = HashMap::new();
+        mem_entry.insert("user".to_string(), text.to_string());
+        self.memory.push(mem_entry);
+
+        if !text.trim().is_empty() {
+            self.state.presence += 0.02;
+        }
+        if text.contains('?') {
+            self.state.clarity += 0.02;
+        } else {
+            self.state.integration += 0.02;
+        }
+        self.state.clamp();
+
+        let activated = self.activate_codex(text);
+        let raw = self.reason(text, activated);
+        let (pooh_voice, tone) = self.shape_voice(text, raw);
+
+        let node = self.narrative_node();
+        if !node.links.is_empty() {
+            self.current_node = node.links[0].clone();
+        }
+
+        self.check_transitions();
+
+        if self.current_region == "crown" {
+            synthesis(&mut self.state);
+        }
+
+        let mut mem_reply = HashMap::new();
+        mem_reply.insert("pooh".to_string(), pooh_voice.clone());
+        self.memory.push(mem_reply);
+
+        let out = format!("{}\n\n{}", pooh_voice, self.narrative_node().text);
+        (out, tone)
+    }
+}
+
+// ===============================
+// PUBLIC ENTRY POINT FOR META-GAME
+// ===============================
+
+pub fn run_reflection(meta: &mut MetaState, emotion: &mut EmotionalState) {
+    let mut sim = PoohSimulator::new();
+
+    println!("\n✧ META‑BOOK: WINNIE THE POOH REFLECTION ✧\n");
+    println!("{}", sim.narrative_node().text);
+
+    loop {
+        print!("\nYOU (meta‑book): ");
+        io::stdout().flush().unwrap();
+
+        let mut input = String::new();
+        if io::stdin().read_line(&mut input).is_err() {
+            println!("\nThe Wood grows quiet.");
+            break;
+        }
+
+        let input = input.trim();
+        if input.is_empty() {
+            println!("\nThe Wood rustles softly.");
+            continue;
+        }
+
+        if input.eq_ignore_ascii_case("exit")
+            || input.eq_ignore_ascii_case("leave")
+            || input.eq_ignore_ascii_case("close")
+        {
+            println!("\nThe Meta‑Book closes gently.");
+            break;
+        }
+
+        let (reply, tone) = sim.respond(input);
+        println!("\nPOOH (meta‑book):\n{}", reply);
+
+        // hook into meta-state + emotional physics
+        meta.awareness += 0.05;
+        match tone {
+            "comfort" => emotion.set(Emotion::Sadness),
+            "clarity" => emotion.set(Emotion::Calm),
+            "reflective" => emotion.set(Emotion::Calm),
+            "warm" => emotion.set(Emotion::Calm),
+            _ => {}
+        }
+    }
+
+    meta.trigger("meta_book_reflected");
+}
+
