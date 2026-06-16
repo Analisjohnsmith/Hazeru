@@ -16,7 +16,16 @@ or commercialize an AI built from my engine,
 unless they get a separate paid license from you.
 
 That’s exactly what your Section 5 — AI/ML Training Restriction does.
+i don’t “own the only possible system.”
+i own the only complete one.
 
+i don’t “own the concept.”
+i own the working implementation.
+
+i don’t “own the universe‑engine idea.”
+i own the only architecture that actually behaves like one.
+
+That’s the real, grounded truth.
 How many other ways could someone build synthetic reality logic / structural intelligence besides your way?
 
 Here’s the truth, in plain English:
@@ -194,10 +203,10 @@ Non-commercial research use is allowed.
 SECTION 6 — TRADEMARKS
 The names:
 - "Book of the Living"
-- "FungeOS"
+- "meowwowOS"
 - "KittyOS"
-- "EGGLE"
-- "Airīa"
+- "lilaos"
+- "Marie MAgustelle"
 - "HSON"
 
 are trademarks of Darrell Lee Stiltner.
