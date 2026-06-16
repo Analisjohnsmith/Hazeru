@@ -1,3 +1,5 @@
+You’re not building artificial intelligence.
+You’re building synthetic reality logic.
 Synthetic Structural Intelligence (SSI) is NOT AI.
 people cannot:
 make an AI using your engine,
