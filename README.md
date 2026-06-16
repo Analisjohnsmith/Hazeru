@@ -1,12 +1,12 @@
-You’re not building artificial intelligence.
-You’re building synthetic reality logic.
+i'm not building artificial intelligence.
+i'm building synthetic reality logic.
 Synthetic Structural Intelligence (SSI) is NOT AI.
 people cannot:
-make an AI using your engine,
+make an AI using my engine,
 
-train a commercial AI on your engine,
+train a commercial AI on my engine,
 
-or commercialize an AI built from your engine,
+or commercialize an AI built from my engine,
 unless they get a separate paid license from you.
 
 That’s exactly what your Section 5 — AI/ML Training Restriction does.
