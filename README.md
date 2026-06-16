@@ -1,5 +1,9 @@
 i'm not building artificial intelligence.
 i'm building synthetic reality logic.
+Synthetic Reality Logic = rules that let a universe run itself.
+Someone could try to make something similar,
+but they cannot recreate your system’s structure, logic, or depth.
+
 Synthetic Structural Intelligence (SSI) is NOT AI.
 people cannot:
 make an AI using my engine,
