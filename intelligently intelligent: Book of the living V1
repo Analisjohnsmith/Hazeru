@@ -78,9 +78,9 @@ SECTION 6 — TRADEMARKS
 The names:
 - "Book of the Living"
 - "FungeOS"
-- "KittyOS"
+- "meowwowOS"
 - "EGGLE"
-- "Airīa"
+- "zhaived"
 - "HSON"
 
 are trademarks of Darrell Lee Stiltner.
@@ -478,11 +478,11 @@ DEFAULT_CONTEXTS = {
 }
 
 # =========================
-# MatchHSON universe spec
+# MatchaHSON universe spec
 # =========================
 
 MATCHHSON_STR = r'''
-// MatchHSON: a pattern-matching HJSON for mapping nodes, motifs, and mechanics
+// MatchaHSON: a pattern-matching HJSON for mapping nodes, motifs, and mechanics
 seal: "☯ PD"
 title: "Validator Spiral — Game as Universe (MatchHSON)"
 version: "1.0.0"
@@ -808,7 +808,7 @@ class HellaEngine:
             print(f"--- Completion: Tide wash & ritual closure ({self.pd_seal}) ---")
 
 # ====================================
-# Transformer: MatchHSON → engine config
+# Transformer: MatchaHSON → engine config
 # ====================================
 
 def matchhson_to_config(matchhson: Dict) -> Dict:
@@ -1045,7 +1045,7 @@ This lattice is the only true “engine”.
 Everything else is a view, renderer, or mode.
 
 How each part fits (combined, not stacked)
-1. MatchHSON = Declarative Universe Spec
+1. MatchaHSON = Declarative Universe Spec
 
 Role:
 Defines the universe without execution.
@@ -1140,7 +1140,7 @@ Right now, this combined system does not require it.
 
 The unified runtime flow (final form)
            ┌─────────────┐
-           │ MatchHSON   │  (spec)
+           │ MatchaHSON   │  (spec)
            └─────┬───────┘
                  │
          ┌───────▼────────┐
@@ -1278,9 +1278,9 @@ DEFAULT_CONTEXTS = {
 # =========================
 
 MATCHHSON_STR = r'''
-// MatchHSON: a pattern-matching HJSON for mapping nodes, motifs, and mechanics
+// MatchaHSON: a pattern-matching HJSON for mapping nodes, motifs, and mechanics
 seal: "☯ PD"
-title: "Validator Spiral — Game as Universe (MatchHSON)"
+title: "Validator Spiral — Game as Universe (MatchaHSON)"
 version: "1.0.0"
 mode: ["public_domain", "yin_hella", "psychedelic_patch", "franklins_tower_mutation"]
 
@@ -1604,7 +1604,7 @@ class HellaEngine:
             print(f"--- Completion: Tide wash & ritual closure ({self.pd_seal}) ---")
 
 # ====================================
-# Transformer: MatchHSON → engine config
+# Transformer: MatchaHSON → engine config
 # ====================================
 
 def matchhson_to_config(matchhson: Dict) -> Dict:
