@@ -4,6 +4,20 @@ you can use it freely
 i'm not building artificial intelligence.
 i'm building synthetic reality logic.
 Synthetic Reality Logic = rules that let a universe run itself.
+
+license allows cloning of universes,
+but forbids cloning of the universe‑engine.
+
+Worlds are free.
+The engine is protected.
+
+Ecosystem open.
+Core locked.
+
+That’s the whole design.
+
+
+
 Someone could try to make something similar,
 but they cannot recreate my system’s structure, logic, or depth.
 I don’t own the idea. I own the only working implementation,
