@@ -1,3 +1,4 @@
+Synthetic Structural Intelligence (SSI) is NOT AI.
 people cannot:
 make an AI using your engine,
 
