@@ -1,3 +1,13 @@
+people cannot:
+make an AI using your engine,
+
+train a commercial AI on your engine,
+
+or commercialize an AI built from your engine,
+unless they get a separate paid license from you.
+
+That’s exactly what your Section 5 — AI/ML Training Restriction does.
+
 license_text = """
 BOOK OF THE LIVING OPEN CORE LICENSE (BOL-OC 1.0)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
