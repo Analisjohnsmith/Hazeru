@@ -1,17 +1,6 @@
-#!/usr/bin/env python3
 
-"""
-KENJI CONTAINER — THE MIYAZAWA KENJI OMNIBUS
-A Self-Bootstrapping Verbatim Engine.
 
-LEGALLY HARVESTS:
-1. Be not Defeated by the Rain (Ame ni mo makezu)
-2. The Child of the Wild Geese
-3. The Dragon and The Poet
-4. The Great Bear of the Crows
-
-All works are embedded directly in this code - no downloading required.
-"""
+these are 4 english ones  need to translate 10 books.
 
 import os
 import sys
