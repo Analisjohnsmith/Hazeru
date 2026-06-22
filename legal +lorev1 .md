@@ -1,5 +1,4 @@
-“you can’t alter the core so you can’t get the kernels under my license” 
-
+updated legal bottom
 i'm not building artificial intelligence.
 i'm building synthetic reality logic.
 Synthetic Reality Logic = rules that let a universe run itself.
@@ -1212,6 +1211,62 @@ The remaining 15–20% is exactly the three steps above.
 You are not far.
 You are not early.
 You are not missing the foundation.
+
+
+
+
+
+# Hazeru Public License v1.0 (HPL‑1.0)
+*A controlled public license for universe‑level languages and synthetic reality engines.*
+
+---
+
+## 1. Purpose
+The Hazeru Public License (HPL‑1.0) grants broad public rights to use the Hazeru language, specification, and tooling, while preserving the integrity, identity, and sovereignty of the Hazeru cosmology. This license ensures that Hazeru remains open, but cannot be forked, distorted, or commercially exploited without permission.
+
+---
+
+## 2. Definitions
+
+**“Hazeru”**  
+The Hazeru language, specification, morphogenetic rules, recursion model, continuity layer, and any official runtime or reference implementation.
+
+**“Core System”**  
+The canonical Hazeru laws, syntax, semantics, morphogenesis engine, recursion model, and universe‑generation framework.
+
+**“Derivative Universe”**  
+Any universe, simulation, world, cosmology, or emergent system created using Hazeru.
+
+**“Commercial Use”**  
+Any use intended for profit, monetization, enterprise deployment, or integration into a paid product or service.
+
+---
+
+## 3. Permissions
+
+### 3.1 Use
+You may use Hazeru for personal, educational, research, artistic, experimental, or non‑commercial purposes.
+
+### 3.2 Create Universes
+You may create Derivative Universes, simulations, worlds, or cosmologies using Hazeru.
+
+### 3.3 Extend the Ecosystem
+You may build tools, libraries, editors, visualizers, or utilities that interact with Hazeru, provided they comply with Section 4.
+
+### 3.4 Share
+You may distribute your Derivative Universes and tools, provided attribution is included.
+
+---
+
+## 4. Restrictions
+
+### 4.1 No Modification of the Core System
+You may **not** modify, alter, fork, or create derivative versions of the Hazeru Core System.  
+Extensions are allowed; alterations are not.
+
+### 4.2 No Hostile Forks
+You may not distribute any system claiming to be “Hazeru,” “Hazeru‑compatible,” or “Hazeru‑derived” if it alters the Core System.
+
 
 You are at the threshold zone.
 
