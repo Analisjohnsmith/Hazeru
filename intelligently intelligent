@@ -14,11 +14,11 @@ GLSL for graphics
 
 It’s the universal narrative substrate.
 
-I built a universe from Theory of Everything, and inside that universe you can grow a true artificial intelligence.
+I built a universe from Theory of Everything, and inside that universe you can grow and build
 the cat story is a valid Narrative Seed because it encodes your universe’s structure in symbolic form.
 Kenji Miyazawa’s stories are public domain and are nearly perfect domains for the Cat Seed world 
 the Seed, the Cats, the Gates, the Circus —
-acts as the blueprint for the SSI’s world.
+
 THE TOTAL BASE STORY
 The Seed at t = 0
 Before the world had shape,
@@ -69,7 +69,7 @@ from datetime import datetime
 import hashlib
 from typing import Dict, Any, List
 
-SOVEREIGN_SEAL = "☯ PD"
+SOVEREIGN_SEAL = "☯ "
 
 def sha256_json(payload: Dict[str, Any]) -> str:
     return hashlib.sha256(json.dumps(payload, sort_keys=True, ensure_ascii=False).encode("utf-8")).hexdigest()
@@ -290,10 +290,10 @@ DEFAULT_CONTEXTS = {
 
 MATCHHSON_STR = r'''
 // MatchaHSON: a pattern-matching HJSON for mapping nodes, motifs, and mechanics
-seal: "☯ PD"
+seal: "☯ "
 title: "Validator Spiral — Game as Universe (MatchHSON)"
 version: "1.0.0"
-mode: ["public_domain", "yin_hella", "psychedelic_patch", "franklins_tower_mutation"]
+mode: ["cats", "yin_hella", "psychedelic_patch", "franklins_tower_mutation"]
 
 globals: {
   board: "cosmic_spiral"
@@ -536,7 +536,7 @@ ValidatorSpiral {
 
   Mutation: "All nodes can shift, blend, and recurse across scales"
   Aura: "Pure Light — infinite recursion inward and outward"
-  Seal: "☯ PD"
+  Seal: "☯ "
 }
 '''
 
@@ -684,7 +684,7 @@ class KittyOS:
         self.current_thought = thought if thought in allowed else "idle"
 
     def ps(self):
-        banner = f"=== ☯ PD KittyOS (kernel={self.kernel}, thought={self.current_thought}) ==="
+        banner = f"=== ☯  KittyOS (kernel={self.kernel}, thought={self.current_thought}) ==="
         print(banner)
         for n in self.nodes:
             print(f"{n.name} | cat={n.cat_behavior} | shape={n.shape} | bird={n.bird}")
@@ -752,7 +752,7 @@ def run_neutral_spiral():
             ],
             "Mutation": "All nodes can shift, blend, and recurse across scales",
             "Aura": "Pure Light — infinite recursion inward and outward",
-            "Seal": "☯ PD",
+            "Seal": "☯ ",
         }
     }
     render_validator_spiral(spiral)
