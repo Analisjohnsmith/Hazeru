@@ -1,3 +1,6 @@
+
+THIS IS A ARTFIFACT 
+
 license_text = """ BOOK OF THE LIVING OPEN CORE LICENSE (BOL-OC 1.0) ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 SECTION 1 — OPEN CORE LICENSE (MPL-Style) The engine core (runtime, scheduler, domain loader, world container, event system) is licensed under:
