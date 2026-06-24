@@ -368,10 +368,10 @@ matchers: {
 
 rules: {
   commons: {
-    license: "public_domain_dedication"
-    remix: "allowed_unconditionally"
-    credit: "optional_but_encouraged"
-    extraction: "patterns_and_rules_may_be_copied"
+    license: ""
+    remix: ""
+    credit: "d"
+    extraction: "p"
   }
 
   polarity_blend: {
