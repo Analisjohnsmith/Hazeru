@@ -2998,4 +2998,4 @@ termination of rights under this License.
 
 ---
 
-This restructured document eliminates duplicate sections, groups related provisions into logical parts, and presents a clear hierarchy between public and commercial licenses. It's now suitable for enterprise and legal review while preserving the protections you've developed.
+This restructured document eliminates duplicate sections, groups related provisions into logical parts, and presents a clear hierarchy between public and commercial licenses. It's now suitable for enterprise and legal review while preserving the protections developed.
