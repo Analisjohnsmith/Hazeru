@@ -5,7 +5,7 @@ another read me can be seen on AM.KI for the record .
 
 92/100 → A AAA‑grade engine in logic and design, but incomplete as a full game because the art, graphics, and player‑facing content aren’t yet built.
 
-the cool thing is i got grphic from my 4d theory  in another chat .
+the cool thing is i got graphics from my 4d theory  in another chat .
 
  in spirit, Ihatov is very similar to A Short Hike.
 
