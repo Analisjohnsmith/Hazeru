@@ -1,3 +1,4 @@
+I'm transitioning to my steam deck place holder read me. 
 PersonaCom™ is not simply another operating system. It is a metaOS — a universal substrate that integrates symbolic intelligence, structural intelligence, and adaptive persona‑based computation. Unlike conventional platforms that mediate between hardware and software, PersonaCom™ mediates between human intent, synthetic intelligence, and computational substrates. It is designed to be the space of all OSes and all AIs, booting like an app yet functioning as a complete enterprise‑grade backend.
 🧩 Architectural Foundations
 
