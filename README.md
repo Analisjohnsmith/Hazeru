@@ -5,8 +5,7 @@ PersonaCom™ is built on a Rust execution fabric that embeds resilience, observ
 
     Core: Defines symbolic regions, boundaries, resources, and clocks. These are the atomic units of synthetic intelligence.
 
-    Meta: Region kernels, snapshots, and rebalancing — the orchestration of symbolic state across distributed nodes.
-
+    Meta: Region kernels, snapshots, and rebalancing — the orchestration of symbolic state across distributed nod
     Storage: Sled DB with WAL logging, ensuring durability and enterprise reliability.
 
     Auth & Security: JWT validation, TLS, API keys, role‑based claims. PersonaCom™ is hardened for enterprise deployment.
